@@ -6,19 +6,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Rigidbody2D _rb;
-    private Collider2D _col;
+    private StateController _stateController;
     
-    [SerializeField] private float _speed;
-    [SerializeField] private float _jumpForce;
-    [SerializeField] private bool _isGrounded;
-    [SerializeField] private LayerMask _jumpableLayers;
-
-    [SerializeField] private float _gravityMultiplier = 1f;
+    [HideInInspector] public Rigidbody2D rb;
+    [HideInInspector] public Collider2D col;
+    [HideInInspector] public Animator animator;
+    
+    public float speed;
+    public float jumpForce;
+    public bool isGrounded;
+    public LayerMask jumpableLayers;
+    public LayerMask climbableLayers;
+    
+    public float gravityMultiplier = 1f;
+    public float facingDirection = 1f;
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _col = GetComponent<Collider2D>();
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -28,15 +34,15 @@ public class Player : MonoBehaviour
     
     private void Update()
     {
-        //update speed
-        _rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * _speed, _rb.velocity.y);
-        
-        //Debug.Log(Input.GetAxisRaw("Horizontal"));
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-        {
-            _rb.AddForce(Vector2.up * (_jumpForce * _gravityMultiplier), ForceMode2D.Impulse);
-            //Debug.Log(Vector2.up * (_jumpForce * _gravityMultiplier));
-        }
+        // //update speed
+        // _rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * speed, _rb.velocity.y);
+        //
+        // //Debug.Log(Input.GetAxisRaw("Horizontal"));
+        // if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        // {
+        //     _rb.AddForce(Vector2.up * (jumpForce * gravityMultiplier), ForceMode2D.Impulse);
+        //     //Debug.Log(Vector2.up * (_jumpForce * _gravityMultiplier));
+        // }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -44,14 +50,25 @@ public class Player : MonoBehaviour
         }
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
-        return Physics2D.BoxCast(_col.bounds.center, _col.bounds.size, 0f, Vector2.down, 0.1f * _gravityMultiplier, _jumpableLayers);
+        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, 0.1f * gravityMultiplier, jumpableLayers);
+    }
+    
+    public bool IsClimbable()
+    {
+        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.zero, 0f, climbableLayers);
     }
     
     private void ReverseGravity()
     {
-        _gravityMultiplier *= -1;
-        _rb.gravityScale *= -1;
+        gravityMultiplier *= -1;
+        rb.gravityScale *= -1;
+    }
+    
+    public void Flip()
+    {
+        facingDirection *= -1;
+        transform.localScale = new Vector3(facingDirection, transform.localScale.y);
     }
 }
