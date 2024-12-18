@@ -23,7 +23,7 @@ public class Fall : Air
         
         if (_player.IsGrounded())
         {
-            Debug.Log("grounded");
+            //Debug.Log("grounded");
             _stateController.ChangeState(new Idle());
         }
     }

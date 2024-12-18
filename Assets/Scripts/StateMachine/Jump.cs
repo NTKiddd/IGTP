@@ -9,6 +9,7 @@ public class Jump : Air
         base.OnEnter();
         
         Debug.Log("Jump");
+        // set player velocity to zero before jumping so it wont be affect by other forces
         _player.rb.velocity = Vector2.zero;
         _player.rb.AddForce(Vector2.up * (_player.jumpForce * _player.gravityMultiplier), ForceMode2D.Impulse);
         _player.animator.Play("Jump");

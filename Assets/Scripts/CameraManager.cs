@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : Singleton<CameraManager>
 {
     private Collider2D _currentRoom;
     public CinemachineVirtualCamera _virtualCamera;
-    
-    private void Start()
+
+    public void SetCamera(Vector2 pos)
     {
-        
-    }
-    
-    private void Update()
-    {
-        
+        _virtualCamera.transform.position = new Vector3(pos.x, pos.y, _virtualCamera.transform.position.z);
     }
 }

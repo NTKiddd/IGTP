@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public LayerMask jumpableLayers;
     public LayerMask climbableLayers;
     
-    public float gravityMultiplier = 1f;
+    public int gravityMultiplier = 1;
     public float facingDirection = 1f;
     private void Awake()
     {
@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, 0.1f * gravityMultiplier, jumpableLayers);
+        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, 0.15f * gravityMultiplier, jumpableLayers);
     }
     
     public bool IsClimbable()

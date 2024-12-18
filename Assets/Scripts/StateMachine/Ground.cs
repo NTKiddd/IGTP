@@ -23,6 +23,11 @@ public class Ground : State
             _stateController.ChangeState(new Fall());
         }
         
+        if (!_player.IsGrounded() && _player.rb.velocity.y > 0 && _player.gravityMultiplier == -1)
+        {
+            _stateController.ChangeState(new Fall());
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) && _player.IsGrounded())
         {
             _stateController.ChangeState(new Jump());
